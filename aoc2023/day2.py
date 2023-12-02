@@ -1,5 +1,6 @@
 from aoc_utils import aoc_utils
 import re
+from math import prod
 
 class Day2(aoc_utils.AoCChallenge):
   day = 2
@@ -14,13 +15,16 @@ class Day2(aoc_utils.AoCChallenge):
     if input == None:
       input = self.input
     if part == 2:
-      return "no part 2 yet"
+      power_games = [
+        game.extract_game_power() for game in self.games
+      ]
+      return sum(power_games)
     if len(self.games) == 0:
       self.set_games(input)
     possible_games = [
       game.game_id for game in self.games if game.is_game_possible()
     ]
-    return(sum(possible_games))
+    return sum(possible_games)
   
   def set_games(self, input):
     self.games = [Game(game_text, self.max_cubes) for game_text in input]
@@ -64,6 +68,24 @@ class Game():
       if trial[color] > self.max_cubes[color]:
         return False
     return True
+  
+  def extract_game_power(self):
+    min_cubes = self.extract_game_min_cubes()
+    power = prod(min_cubes.values())
+    return power
+
+  def extract_game_min_cubes(self):
+    min_cubes = dict(zip(
+      self.colors,
+      [0] * len(self.colors)
+    ))
+    for trial in self.trials:
+      for color in self.colors:
+        if min_cubes[color] < trial[color]:
+          min_cubes.update({color: trial[color]})
+    return min_cubes 
+
+
       
 
 

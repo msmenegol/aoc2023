@@ -23,6 +23,12 @@ class TestDay2(unittest.TestCase):
       len(self.day2.games),
       5
     )
+  
+  def test_solve_part_2(self):
+    self.assertEqual(
+      self.day2.solve(self.test_input, part = 2),
+      2286
+    )
 
 class TestGame(unittest.TestCase):
   test_input = \
@@ -75,6 +81,22 @@ class TestGame(unittest.TestCase):
   def test_is_game_possible(self):
     self.assertFalse(
       self.game.is_game_possible()
+    )
+
+  def test_extract_game_min_cubes(self):
+    self.assertEqual(
+      self.game.extract_game_min_cubes(),
+      {
+        "red": 20,
+        "green": 13,
+        "blue": 6
+      }
+    )
+
+  def test_extract_game_power(self):
+    self.assertEqual(
+      self.game.extract_game_power(),
+      20*13*6
     )
     
 
