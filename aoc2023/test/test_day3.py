@@ -16,6 +16,8 @@ class TestDay3(unittest.TestCase):
   ]
   day3 = Day3()
   day3.set_numbers(test_input)
+  day3.set_gears(test_input)
+  day3.set_valid_numbers(test_input)
 
   def test_solve(self):
     self.assertEqual(
@@ -57,6 +59,15 @@ class TestDay3(unittest.TestCase):
     )
     self.assertEqual(content_9, ".*....598.")
 
+  def test_set_gears(self):
+    self.assertEqual(len(self.day3.gears), 3)
+  
+  def test_solve_part_2(self):
+    self.assertEqual(
+      self.day3.solve(self.test_input, part = 2),
+      467835
+    )
+
 class TestNumber(unittest.TestCase):
   def test_init(self):
     number = Number(
@@ -81,4 +92,30 @@ class TestNumber(unittest.TestCase):
       max_column = 3
     )
     self.assertEqual(number.box, ((1, 1), (3, 3)))
-    
+  
+  def test_intercepts(self):
+    number = Number(
+      value = 35,
+      pos_start = (2, 2),
+      pos_end = (2, 3),
+      max_row = 9,
+      max_column = 8
+    )
+    self.assertTrue(number.intercepts(
+      ((1, 1), (3, 4))
+    ))
+    self.assertTrue(number.intercepts(
+      ((1, 1), (2, 2))
+    ))
+    self.assertTrue(number.intercepts(
+      ((2, 3), (3, 4))
+    ))
+    self.assertTrue(number.intercepts(
+      ((2, 2), (4, 5))
+    ))
+    self.assertFalse(number.intercepts(
+      ((4, 5), (4, 5))
+    ))
+    self.assertFalse(number.intercepts(
+      ((0, 0), (5, 0))
+    ))
