@@ -1,5 +1,4 @@
 class AoCChallenge:
-  input = ""
   day = 0
 
   def __init__(self):
@@ -7,7 +6,6 @@ class AoCChallenge:
     self.load_input()
     
   def load_input(self):
-    input = []
     with open(self.input_path) as f:
       self.input = f.read().splitlines() 
   
