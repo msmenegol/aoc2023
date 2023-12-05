@@ -7,23 +7,33 @@ class Day5(aoc_utils.AoCChallenge):
   def __init__(self):
     super().__init__()
     self.maps = {}
-    self.starting_seeds = []
+    self.starting_seed_values = []
 
   def solve(self, input = None, part = 1):
     if input == None:
       input = self.input
-    if self.starting_seeds == []:
+    if self.starting_seed_values == []:
       self.set_starting_seeds(input)
     if self.maps == {}:
       self.set_maps(input)
-    if part == 2:    
-      return "Not implemented yet"
+    if part == 2:
+      seed_ranges = [
+        (self.starting_seed_values[i * 2], self.starting_seed_values[i * 2 + 1])
+        for i in range(int(len(self.starting_seed_values) / 2))
+      ]
+      return self.find_min_in_ranges(
+        seed_ranges,
+        'seed',
+        'location'
+      )
     else:
-      return min(self.find_target_values(self.starting_seeds, "location"))
+      return min(
+        self.find_target_values(self.starting_seed_values, "location")
+      )
   
   def set_starting_seeds(self, input):
     tokens = input[0].strip().split()
-    self.starting_seeds = [int(s) for s in tokens[1:]]
+    self.starting_seed_values = [int(s) for s in tokens[1:]]
   
   def set_maps(self, input):
     map_rows = []
@@ -48,6 +58,21 @@ class Day5(aoc_utils.AoCChallenge):
       category = _map.destination
     return values
 
+  def find_min_in_ranges(self, source_ranges, source, destination):
+    if source == destination:
+      starts = [sr[0] for sr in source_ranges]
+      return min(starts)
+    else:
+      map = self.maps[source]
+      dest_ranges = []
+      for sr in source_ranges:
+        dest_ranges.extend(map.find_destination_ranges(sr))
+      return self.find_min_in_ranges(
+        dest_ranges,
+        map.destination,
+        destination
+      )
+  
 
 class Map:
   def __init__(self, map_rows):
@@ -70,6 +95,33 @@ class Map:
       if destination_value != None:
         return destination_value
     return source_value
+  
+  def expand_source_range(self, source_range):
+    source_start = source_range[0]
+    source_end = source_range[0] + source_range[1] - 1
+    row_starts = [
+      mr.source_start for mr in self._map
+      if source_start < mr.source_start < source_end
+    ]
+    row_ends = [
+      mr.source_end for mr in self._map
+      if source_start < mr.source_end < source_end
+    ]
+    points = [source_start] + row_starts + row_ends + [source_end]
+    points.sort()
+    lenghts = [points[i + 1] - points[i] for i in range(len(points) - 1)]
+    ranges = list(zip(points[:-1], lenghts))
+    return ranges
+  
+  def find_destination_ranges(self, source_range):
+    source_ranges = self.expand_source_range(source_range)
+    dest_ranges = [
+      (self.find_destination(sr[0]), sr[1])
+      for sr in source_ranges
+    ]
+    return dest_ranges
+
+
 
 class MapRow:
   def __init__(self, dest_start, source_start, length):
