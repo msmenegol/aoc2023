@@ -1,5 +1,4 @@
 from aoc_utils import aoc_utils
-import re
 
 class Day5(aoc_utils.AoCChallenge):
   day = 5
@@ -122,7 +121,6 @@ class Map:
     return dest_ranges
 
 
-
 class MapRow:
   def __init__(self, dest_start, source_start, length):
     self.dest_start = dest_start
@@ -140,10 +138,6 @@ class MapRow:
       return None
 
   
-
-
-
-
 if __name__ == '__main__':
   day5 = Day5()
   print("Answer for part 1: " + str(day5.solve()))
