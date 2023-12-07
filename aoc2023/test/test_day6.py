@@ -1,7 +1,7 @@
 import unittest
 from day6 import Day6
 
-class TestDay5(unittest.TestCase):
+class TestDay6(unittest.TestCase):
   def test_solve(self):
     test_input = """
 Time:      7  15   30
