@@ -1,5 +1,4 @@
 from aoc_utils import aoc_utils
-import re
 
 class Day10(aoc_utils.AoCChallenge):
   day = 10
