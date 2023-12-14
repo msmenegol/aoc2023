@@ -1,5 +1,4 @@
 from aoc_utils import aoc_utils
-from math import prod
 
 class Day12(aoc_utils.AoCChallenge):
   day = 12
